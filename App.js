@@ -5,78 +5,118 @@ import { useState } from "react";
 import Display from "./components/Display";
 
 export default function App() {
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState("0");
   const [number2, setNumber2] = useState(null);
   const [operation, setOperation] = useState("");
+  const [result, setResult] = useState(false);
+  const formatNumber=(num)=>{
+    if(num.length<=11)return num;
+    if(num.includes('.')){
+      let [allowedNum, allowedDec] = num.split('.');
+      allowedDec = 11 - allowedNum.length - 1;
+      return parseFloat(allowedNum).toFixed(Math.max(0,allowedDec)).toString();
+    }
+    return (parseFloat(num).toExponential(3)).toString();
+  }
   const displayNum = (num) => {
-    if (operation.length === 0) {
-      setNumber((prev) =>
-        number !== 0 ? parseInt(prev.toString() + num) : parseInt(num)
-      );
+    if(result && operation.length===0){
+      setNumber(formatNumber(num));
+      setResult(false);
+    }
+    else if (operation.length === 0) {
+      setNumber((prev) => formatNumber(number !== '0' ? prev + num : num));
     } else {
-      setNumber2((prev) => (!number2 ? parseInt(num) : parseInt(prev.toString() + num)));
+      setNumber2((prev) => formatNumber(!number2 ? num : prev + num));
     }
   };
   const clearNum = () => {
-    if(number2){
+    if (number2) {
       setNumber2(null);
-    }
-    else{
+    } else {
       setNumber(0);
     }
-    setOperation('');
+    setOperation("");
   };
   const addNum = () => {
-    if(number>0){
+    if (number > 0) {
       setOperation("add");
     }
   };
-  const subtractNum=()=>{
-    if(number>0){
+  const subtractNum = () => {
+    if (number > 0) {
       setOperation("subtract");
     }
-  }
-  const multNum=()=>{
-    if(number>0){ 
+  };
+  const multNum = () => {
+    if (number > 0) {
       setOperation("multiply");
     }
-  }
-  const divNum=()=>{
-    if(number>0){
+  };
+  const divNum = () => {
+    if (number > 0) {
       setOperation("division");
     }
   };
-  const percentNum=()=>{
-    setNumber(prev=>prev/100);
-  }
+  const percentNum = () => {
+    setNumber((prev) => parseFloat(prev / 100));
+  };
+  const addDecimal = () => {
+    if (number2 && !number2.includes(".")) {
+      setNumber2((prev) => prev + ".");
+    } else if (!number.includes(".")) {
+      setNumber((prev) => prev + ".");
+    }
+  };
   const resultNum = () => {
-    if(!number2){
+    if (!number2) {
       return;
     }
     switch (operation) {
       case "add":
-        setNumber(number + number2);
+        setNumber(
+          formatNumber((parseFloat(number) + parseFloat(number2)).toString())
+        );
         break;
       case "subtract":
-        setNumber(number-number2);
+        setNumber(
+          formatNumber((parseFloat(number) - parseFloat(number2)).toString())
+        );
         break;
       case "multiply":
-        setNumber(number*number2);
+        setNumber(
+          formatNumber((parseFloat(number) * parseFloat(number2)).toString())
+        );
         break;
       case "division":
-        setNumber(number/number2)
+        if (parseFloat(number2) === 0) {
+          setNumber("Error");
+        } else {
+          setNumber(formatNumber((parseFloat(number) / parseFloat(number2)).toString()));
+        }
         break;
       default:
-        break
+        break;
     }
-    setOperation('');
+    setOperation("");
     setNumber2(null);
+    setResult(true);
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#121212" }}>
       <View style={styles.container}>
-        <Display number={number} number2={number2} displayNum={displayNum}/>
-        <ButtonLayout operation={operation} displayNum={displayNum} clearNum={clearNum} resultNum={resultNum} divNum={divNum} multNum={multNum} addNum={addNum} subtractNum={subtractNum} percentNum={percentNum}/>
+        <Display number={number} number2={number2} displayNum={displayNum} />
+        <ButtonLayout
+          addDecimal={addDecimal}
+          operation={operation}
+          displayNum={displayNum}
+          clearNum={clearNum}
+          resultNum={resultNum}
+          divNum={divNum}
+          multNum={multNum}
+          addNum={addNum}
+          subtractNum={subtractNum}
+          percentNum={percentNum}
+        />
       </View>
     </SafeAreaView>
   );

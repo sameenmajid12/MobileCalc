@@ -11,42 +11,14 @@ const NumberButton = ({ label, displayNum }) => {
     </TouchableOpacity>
   );
 };
-
-const AddButton = ({ addNum, active }) => (
+const OperatorButton=({symbol, active, onPress})=>(
   <TouchableOpacity
     style={!active ? styles.operatorButton : styles.operatorButtonActive}
-    onPress={() => addNum()}
+    onPress={onPress}
   >
-    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>+</Text>
+    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>{symbol}</Text>
   </TouchableOpacity>
-);
-
-const SubtractButton = ({ subtractNum, active }) => (
-  <TouchableOpacity
-    style={!active ? styles.operatorButton : styles.operatorButtonActive}
-    onPress={() => subtractNum()}
-  >
-    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>-</Text>
-  </TouchableOpacity>
-);
-
-const MultButton = ({ multNum, active }) => (
-  <TouchableOpacity
-    style={!active ? styles.operatorButton : styles.operatorButtonActive}
-    onPress={() => multNum()}
-  >
-    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>×</Text>
-  </TouchableOpacity>
-);
-
-const DivButton = ({ divNum, active }) => {console.log(active);return(
-  <TouchableOpacity
-    style={!active ? styles.operatorButton : styles.operatorButtonActive}
-    onPress={() => divNum()}
-  >
-    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>÷</Text>
-  </TouchableOpacity>
-)};
+)
 
 const ACButton = ({ clearNum }) => (
   <TouchableOpacity style={styles.acButton} onPress={() => clearNum()}>
@@ -66,10 +38,10 @@ const EqualButton = ({ resultNum }) => (
   </TouchableOpacity>
 );
 
-const DotButton = () => (
+const DotButton = ({addDecimal}) => (
   <TouchableOpacity
     style={styles.numberButton}
-    onPress={() => console.log(".")}
+    onPress={() => addDecimal()}
   >
     <Text style={styles.buttonText}>.</Text>
   </TouchableOpacity>
@@ -85,6 +57,7 @@ const ButtonLayout = ({
   operation,
   resultNum,
   percentNum,
+  addDecimal
 }) => {
 
   return (
@@ -92,32 +65,33 @@ const ButtonLayout = ({
       <View style={styles.buttonContainer}>
         <ACButton clearNum={clearNum} />
         <PercentageButton percentNum={percentNum} />
-        <DivButton active={operation === "division"} divNum={divNum} />
+        <OperatorButton active={operation === "division"} onPress={divNum} symbol="÷"/>
       </View>
       <View style={styles.buttonContainer}>
         <NumberButton label="7" displayNum={displayNum} />
         <NumberButton label="8" displayNum={displayNum} />
         <NumberButton label="9" displayNum={displayNum} />
-        <MultButton active={operation === "multiply"} multNum={multNum} />
+        <OperatorButton active={operation === "multiply"} onPress={multNum} symbol="×"/>
       </View>
       <View style={styles.buttonContainer}>
         <NumberButton label="4" displayNum={displayNum} />
         <NumberButton label="5" displayNum={displayNum} />
         <NumberButton label="6" displayNum={displayNum} />
-        <SubtractButton
+        <OperatorButton
           active={operation === "subtract"}
-          subtractNum={subtractNum}
+          onPress={subtractNum}
+          symbol='-'
         />
       </View>
       <View style={styles.buttonContainer}>
         <NumberButton label="1" displayNum={displayNum} />
         <NumberButton label="2" displayNum={displayNum} />
         <NumberButton label="3" displayNum={displayNum} />
-        <AddButton active={operation === "add"} addNum={addNum} />
+        <OperatorButton active={operation === "add"} onPress={addNum} symbol="+"/>
       </View>
       <View style={styles.buttonContainer}>
         <NumberButton label="0" displayNum={displayNum} />
-        <DotButton />
+        <DotButton addDecimal={addDecimal}/>
         <EqualButton resultNum={resultNum} />
       </View>
     </View>
