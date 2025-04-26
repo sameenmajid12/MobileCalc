@@ -1,108 +1,124 @@
-import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import React from "react";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
-const addNum=()=>{
-    
-}
-const subtractNum=()=>{
-
-}
-const multNum=()=>{
-
-}
-const percentNum=()=>{
-
-}
-const resultNum=()=>{
-  
-}
 const NumberButton = ({ label, displayNum }) => {
   return (
-    <TouchableOpacity style={label!=='0'?styles.numberButton:styles.zeroButton} onPress={() => displayNum(label)}>
+    <TouchableOpacity
+      style={label !== "0" ? styles.numberButton : styles.zeroButton}
+      onPress={() => displayNum(label)}
+    >
       <Text style={styles.buttonText}>{label}</Text>
     </TouchableOpacity>
   );
 };
 
-const AddButton = () => (
-  <TouchableOpacity style={styles.operatorButton} onPress={() => addNum()}>
-    <Text style={styles.buttonText}>+</Text>
+const AddButton = ({ addNum, active }) => (
+  <TouchableOpacity
+    style={!active ? styles.operatorButton : styles.operatorButtonActive}
+    onPress={() => addNum()}
+  >
+    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>+</Text>
   </TouchableOpacity>
 );
 
-const SubtractButton = () => (
-  <TouchableOpacity style={styles.operatorButton} onPress={() => subtractNum()}>
-    <Text style={styles.buttonText}>-</Text>
+const SubtractButton = ({ subtractNum, active }) => (
+  <TouchableOpacity
+    style={!active ? styles.operatorButton : styles.operatorButtonActive}
+    onPress={() => subtractNum()}
+  >
+    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>-</Text>
   </TouchableOpacity>
 );
 
-const MultButton = () => (
-  <TouchableOpacity style={styles.operatorButton} onPress={() => multNum()}>
-    <Text style={styles.buttonText}>×</Text>
+const MultButton = ({ multNum, active }) => (
+  <TouchableOpacity
+    style={!active ? styles.operatorButton : styles.operatorButtonActive}
+    onPress={() => multNum()}
+  >
+    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>×</Text>
   </TouchableOpacity>
 );
 
-const DivButton = () => (
-  <TouchableOpacity style={styles.operatorButton} onPress={() => divideNum()}>
-    <Text style={styles.buttonText}>÷</Text>
+const DivButton = ({ divNum, active }) => {console.log(active);return(
+  <TouchableOpacity
+    style={!active ? styles.operatorButton : styles.operatorButtonActive}
+    onPress={() => divNum()}
+  >
+    <Text style={!active ? styles.buttonText : styles.buttonTextActive}>÷</Text>
   </TouchableOpacity>
-);
+)};
 
-const ACButton = ({clearNum}) => (
+const ACButton = ({ clearNum }) => (
   <TouchableOpacity style={styles.acButton} onPress={() => clearNum()}>
     <Text style={styles.functionText}>AC</Text>
   </TouchableOpacity>
 );
 
-const PercentageButton = () => (
+const PercentageButton = ({ percentNum }) => (
   <TouchableOpacity style={styles.functionButton} onPress={() => percentNum()}>
     <Text style={styles.functionText}>%</Text>
   </TouchableOpacity>
 );
 
-const EqualButton = () => (
+const EqualButton = ({ resultNum }) => (
   <TouchableOpacity style={styles.operatorButton} onPress={() => resultNum()}>
     <Text style={styles.buttonText}>=</Text>
   </TouchableOpacity>
 );
 
 const DotButton = () => (
-  <TouchableOpacity style={styles.numberButton} onPress={() => console.log('.')}>
+  <TouchableOpacity
+    style={styles.numberButton}
+    onPress={() => console.log(".")}
+  >
     <Text style={styles.buttonText}>.</Text>
   </TouchableOpacity>
 );
 
-const ButtonLayout = ({displayNum, clearNum}) => {
-  
+const ButtonLayout = ({
+  displayNum,
+  clearNum,
+  addNum,
+  divNum,
+  multNum,
+  subtractNum,
+  operation,
+  resultNum,
+  percentNum,
+}) => {
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.buttonContainer}>
-        <ACButton clearNum={clearNum}/>
-        <PercentageButton />
-        <DivButton />
+        <ACButton clearNum={clearNum} />
+        <PercentageButton percentNum={percentNum} />
+        <DivButton active={operation === "division"} divNum={divNum} />
       </View>
       <View style={styles.buttonContainer}>
-        <NumberButton label='7' displayNum={displayNum} />
-        <NumberButton label='8' displayNum={displayNum} />
-        <NumberButton label='9' displayNum={displayNum} />
-        <MultButton />
+        <NumberButton label="7" displayNum={displayNum} />
+        <NumberButton label="8" displayNum={displayNum} />
+        <NumberButton label="9" displayNum={displayNum} />
+        <MultButton active={operation === "multiply"} multNum={multNum} />
       </View>
       <View style={styles.buttonContainer}>
-        <NumberButton label='4' displayNum={displayNum} />
-        <NumberButton label='5' displayNum={displayNum} />
-        <NumberButton label='6' displayNum={displayNum} />
-        <SubtractButton />
+        <NumberButton label="4" displayNum={displayNum} />
+        <NumberButton label="5" displayNum={displayNum} />
+        <NumberButton label="6" displayNum={displayNum} />
+        <SubtractButton
+          active={operation === "subtract"}
+          subtractNum={subtractNum}
+        />
       </View>
       <View style={styles.buttonContainer}>
-        <NumberButton label='1' displayNum={displayNum} />
-        <NumberButton label='2' displayNum={displayNum} />
-        <NumberButton label='3' displayNum={displayNum} />
-        <AddButton />
+        <NumberButton label="1" displayNum={displayNum} />
+        <NumberButton label="2" displayNum={displayNum} />
+        <NumberButton label="3" displayNum={displayNum} />
+        <AddButton active={operation === "add"} addNum={addNum} />
       </View>
       <View style={styles.buttonContainer}>
-        <NumberButton label='0' displayNum={displayNum} />
+        <NumberButton label="0" displayNum={displayNum} />
         <DotButton />
-        <EqualButton />
+        <EqualButton resultNum={resultNum} />
       </View>
     </View>
   );
@@ -111,63 +127,75 @@ const ButtonLayout = ({displayNum, clearNum}) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 0.8,
-    justifyContent: 'space-evenly',
+    justifyContent: "space-evenly",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    columnGap:10
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    columnGap: 10,
   },
-  numberButton:{
-    width:90,
-    height:90,
-    backgroundColor:'#505050',
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius:'50%'
+  numberButton: {
+    width: 90,
+    height: 90,
+    backgroundColor: "#505050",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "50%",
   },
-  buttonText:{
-    color:'white',
-    fontSize:24
+  buttonText: {
+    color: "white",
+    fontSize: 24,
   },
-  operatorButton:{
-    width:90,
-    height:90,
-    backgroundColor:'#ff9500',
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius:'50%'
+  buttonTextActive: {
+    color: "#ff9500",
+    fontSize: 24,
   },
-  zeroButton:{
-    width:200,
-    backgroundColor:'#505050',
-    borderRadius:100,
-    flexDirection:'row',
-    justifyContent:'flex-start',
-    alignItems:'center',
-    paddingLeft:40,
+  operatorButton: {
+    width: 90,
+    height: 90,
+    backgroundColor: "#ff9500",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "50%",
   },
-  functionButton:{
-    backgroundColor:'#b7b7b7',
-    width:90,
-    height:90,
-    borderRadius:'50%',
-    justifyContent:'center',
-    alignItems:'center'
+  operatorButtonActive: {
+    width: 90,
+    height: 90,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "50%",
   },
-  functionText:{
-    color:'#121212',
-    fontSize:24
+  zeroButton: {
+    width: 200,
+    backgroundColor: "#505050",
+    borderRadius: 100,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingLeft: 40,
   },
-  acButton:{
-    backgroundColor:'#b7b7b7',
-    width:200,
-    height:90,
-    borderRadius:100,
-    flexDirection:'row',
-    alignItems:'center',
-    paddingLeft:40
-  }
+  functionButton: {
+    backgroundColor: "#b7b7b7",
+    width: 90,
+    height: 90,
+    borderRadius: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  functionText: {
+    color: "#121212",
+    fontSize: 24,
+  },
+  acButton: {
+    backgroundColor: "#b7b7b7",
+    width: 200,
+    height: 90,
+    borderRadius: 100,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 40,
+  },
 });
 
-export default ButtonLayout ;
+export default ButtonLayout;

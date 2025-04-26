@@ -1,10 +1,9 @@
 import { View, StyleSheet,TextInput } from "react-native";
 
-const Display=({number, displayNum})=>{
-  console.log(number)
+const Display=({number, displayNum,number2})=>{
   return(
   <View style={styles.displayContainer}>
-    <TextInput editable={false} value={number.toString()} onChangeText={displayNum} style={styles.displayText}/>
+    <TextInput editable={false} value={!number2?number.toString():number2.toString()} onChangeText={displayNum} style={styles.displayText}/>
   </View>)
 }
 const styles = StyleSheet.create({
