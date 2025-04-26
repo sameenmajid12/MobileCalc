@@ -33,7 +33,7 @@ export default function App() {
     if (number2) {
       setNumber2(null);
     } else {
-      setNumber(0);
+      setNumber('0');
     }
     setOperation("");
   };
